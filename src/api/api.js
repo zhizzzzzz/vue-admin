@@ -1,17 +1,27 @@
-import axios from 'axios';
+import { get, post } from './axios';
 
-let base = '';
+export const requestLogin = params => { return post(`/user/login`, params); };
 
-export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
+export const requestRegister = params => { return post(`/user/register`, params); };
 
-export const getUserList = params => { return axios.get(`${base}/user/list`, { params: params }); };
+export const getVerificationCode = params => { return post(`/user/verificationCode`, params); };
 
-export const getUserListPage = params => { return axios.get(`${base}/user/listpage`, { params: params }); };
+export const modifyPassword = params => { return post(`/user/modifyPassword`, params); };
 
-export const removeUser = params => { return axios.get(`${base}/user/remove`, { params: params }); };
+export const getUserList = params => { return post(`/user/findList`, params); };
 
-export const batchRemoveUser = params => { return axios.get(`${base}/user/batchremove`, { params: params }); };
+export const modifyUser = params => { return post(`/user/modifyUser`, params); };
 
-export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }); };
+export const resetPassword = params => { return post(`/user/resetPassword`, params); };
 
-export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }); };
+export const forgetPassword = params => { return post(`/user/forgetPassword`, params); };
+
+export const getConfigListPage = params => { return post(`/appConfig/findList`, params); };
+
+export const doConfig = params => { return post(`/appConfig/config`, params); };
+
+export const delConfig = params => { return post(`/appConfig/delete`, params); };
+
+export const transferConfig = params => { return post(`/appConfig/transfer`, params); };
+
+export const getConfig = params => { return get(`/appConfig/get`, params); };
