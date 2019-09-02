@@ -19,15 +19,15 @@
 		<el-table :data="configs" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
-			<el-table-column prop="id"label="序号" width="100">
+			<el-table-column prop="app_id"label="应用ID" width="160">
 			</el-table-column>
-			<el-table-column prop="package_name" label="包名" width="100" sortable>
+			<el-table-column prop="package_name" label="包名" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="app_name" label="App名称" width="160" sortable>
+			<el-table-column prop="app_name" label="App名称" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="introduction" label="APP简介" width="160" sortable>
+			<el-table-column prop="introduction" label="APP简介" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="app_version" label="版本" width="160" :formatter="formatType" sortable>
+			<el-table-column prop="app_version" label="强更类型" width="160" :formatter="formatType" sortable>
 			</el-table-column>
 			<el-table-column prop="web_url" label="web地址" min-width="160" sortable>
 			</el-table-column>
@@ -64,11 +64,11 @@
 				<el-form-item label="APP简介" prop="introduction">
 					<el-input v-model="editForm.introduction" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="版本" prop="app_version">
+				<el-form-item label="强更类型" prop="app_version">
 					<el-select v-model="editForm.app_version" placeholder="请选择App版本">
 						<el-option label="进入App内部" value="0"></el-option>
-						<el-option label="进入带导航栏的webview " value="1"></el-option>
-						<el-option label="跳转浏览器打开web" value="2"></el-option>
+<!--						<el-option label="进入带导航栏的webview " value="1"></el-option>-->
+<!--						<el-option label="跳转浏览器打开web" value="2"></el-option>-->
 						<el-option label="进入不带导航栏的webview" value="3"></el-option>
 						<el-option label="强更 安卓专用" value="4"></el-option>
 					</el-select>
@@ -101,11 +101,11 @@
 				<el-form-item label="APP简介" prop="introduction">
 					<el-input v-model="addForm.introduction" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="版本" prop="app_version">
+				<el-form-item label="强更类型" prop="app_version">
 					<el-select v-model="addForm.app_version" placeholder="请选择App版本">
 						<el-option label="进入App内部" value="0"></el-option>
-						<el-option label="进入带导航栏的webview " value="1"></el-option>
-						<el-option label="跳转浏览器打开web" value="2"></el-option>
+<!--						<el-option label="进入带导航栏的webview " value="1"></el-option>-->
+<!--						<el-option label="跳转浏览器打开web" value="2"></el-option>-->
 						<el-option label="进入不带导航栏的webview" value="3"></el-option>
 						<el-option label="强更 安卓专用" value="4"></el-option>
 					</el-select>
@@ -241,8 +241,10 @@
 							type: 'error'
 						});
 					} else {
-						let html = '<pre>'+JSON.stringify(data,null,2)+'</pre>';
+						let style = 'white-space: pre-wrap !important;word-wrap: break-word !important;*white-space: normal !important;';
+						let html = `<pre style="${style}">` + JSON.stringify(data, null, 2) + '</pre>';
 						this.$alert(html, '预览', {
+							customClass: 'config-result',
 							dangerouslyUseHTMLString: true
 						});
 					}
@@ -429,7 +431,11 @@
 	}
 
 </script>
-
+<style>
+	.config-result {
+		width: 600px;
+	}
+</style>
 <style scoped>
 
 </style>

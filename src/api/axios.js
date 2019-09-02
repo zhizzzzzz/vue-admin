@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Qs from 'qs';
 // import { Message, Loading } from 'element-ui'; // 消息提示框组件 这个你们可以不用
+import { Message} from 'element-ui';
 
 // 环境的切换
 if (process.env.NODE_ENV == 'development') {
@@ -10,7 +11,7 @@ if (process.env.NODE_ENV == 'development') {
 }
 
 // 设置请求超时时间
-axios.defaults.timeout = 10000;
+axios.defaults.timeout = 60000;
 
 // 设置post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
@@ -51,9 +52,9 @@ export function get(url, params) {
             // Loading.service(true).close();
             //  Message({message: '请求成功', type: 'success'});
         }).catch(err => {
-            reject(err.data)
+            reject(err.data);
             //Loading.service(true).close();
-            //Message({message: '加载失败', type: 'error'});
+            Message({message: '请求出错', type: 'error'});
         })
     });
 }
@@ -72,9 +73,9 @@ export function post(url, params) {
                 //  Message({message: '请求成功', type: 'success'});
             })
             .catch(err => {
-                reject(err.data)
-                // Loading.service(true).close();
-                // Message({message: '加载失败', type: 'error'});
+                reject(err.data);
+                //Loading.service(true).close();
+                Message({message: '请求出错', type: 'error'});
             })
     });
 }

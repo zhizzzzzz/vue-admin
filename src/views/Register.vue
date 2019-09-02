@@ -90,10 +90,10 @@
                 logining_code: false,
                 showCode: false,
                 ruleForm: {
-                    account: '雨落长安',
+                    account: '',
                     mail: '',
-                    password: 'kpx360',
-                    checkPass: 'kpx360',
+                    password: '',
+                    checkPass: '',
                     code: ''
                 },
                 rules2: {

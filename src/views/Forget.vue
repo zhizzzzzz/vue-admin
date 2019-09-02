@@ -20,7 +20,7 @@
             </el-button>
         </el-form-item>
         <el-form-item style="width:100%;">
-            <el-button type="primary" style="width:100%;" @click.native.prevent="register()" :loading="logining">注册
+            <el-button type="primary" style="width:100%;" @click.native.prevent="forget()" :loading="logining">确认修改
             </el-button>
         </el-form-item>
     </el-form>
@@ -98,7 +98,7 @@
             handleReset2() {
                 this.$refs.ruleForm.resetFields();
             },
-            register(ev) {
+            forget(ev) {
                 var _this = this;
                 this.$refs.ruleForm.validate((valid) => {
                     if (valid) {
@@ -124,6 +124,8 @@
                                 sessionStorage.setItem('user', JSON.stringify(result));
                                 this.$router.push({path: '/table'});
                             }
+                        }).catch(err => {
+                            this.logining = false;
                         });
                     } else {
                         console.log('error submit!!');
@@ -149,6 +151,8 @@
                     } else {
                         Message({message: msg, type: 'success'});
                     }
+                }).catch(err => {
+                    this.logining_code = false;
                 });
             }
         }

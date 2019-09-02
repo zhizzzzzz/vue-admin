@@ -32,8 +32,8 @@
       return {
         logining: false,
         ruleForm: {
-          account: '765091205@qq.com',
-          checkPass: 'kpx360'
+          account: '',
+          checkPass: ''
         },
         rules2: {
           account: [
