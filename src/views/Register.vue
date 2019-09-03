@@ -19,8 +19,8 @@
         </el-form-item>
         <el-form-item :inline="true" label="验证码" prop="code" v-if="showCode">
             <el-input type="text" style="width:63%;" v-model="ruleForm.code" auto-complete="off"></el-input>
-            <el-button type="primary" style="width:35%;float: right;" @click="getCode()" :loading="logining_code">
-                获取邮箱验证码
+            <el-button type="primary" style="width:35%;float: right;" @click="countDown()" :loading="logining_code">
+                {{content}}
             </el-button>
         </el-form-item>
         <el-form-item style="width:100%;">
@@ -86,6 +86,9 @@
                 }
             };
             return {
+                content: '获取邮箱验证码',  // 按钮里显示的内容
+                totalTime: 30,     //记录具体倒计时时间
+                canClick: true, //添加canClick
                 logining: false,
                 logining_code: false,
                 showCode: false,
@@ -115,6 +118,25 @@
             };
         },
         methods: {
+            countDown() {
+                if (!this.canClick) return
+
+                //改动的是这两行代码
+                this.getCode();
+
+                this.canClick = false
+                this.content = this.totalTime + 's后重新发送'
+                let clock = window.setInterval(() => {
+                    this.totalTime--
+                    this.content = this.totalTime + 's后重新发送'
+                    if (this.totalTime < 0) {
+                        window.clearInterval(clock)
+                        this.content = '重新发送验证码'
+                        this.totalTime = 10
+                        this.canClick = true  //这里重新开启
+                    }
+                }, 1000)
+            },
             handleReset2() {
                 this.$refs.ruleForm.resetFields();
             },

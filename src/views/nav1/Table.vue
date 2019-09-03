@@ -67,10 +67,8 @@
 				<el-form-item label="强更类型" prop="app_version">
 					<el-select v-model="editForm.app_version" placeholder="请选择App版本">
 						<el-option label="进入App内部" value="0"></el-option>
-<!--						<el-option label="进入带导航栏的webview " value="1"></el-option>-->
-<!--						<el-option label="跳转浏览器打开web" value="2"></el-option>-->
-						<el-option label="进入不带导航栏的webview" value="3"></el-option>
-						<el-option label="强更 安卓专用" value="4"></el-option>
+						<el-option label="进入不带导航栏的webview" value="1"></el-option>
+						<el-option label="强更 安卓专用" value="2"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="web地址" prop="web_url">
@@ -104,10 +102,8 @@
 				<el-form-item label="强更类型" prop="app_version">
 					<el-select v-model="addForm.app_version" placeholder="请选择App版本">
 						<el-option label="进入App内部" value="0"></el-option>
-<!--						<el-option label="进入带导航栏的webview " value="1"></el-option>-->
-<!--						<el-option label="跳转浏览器打开web" value="2"></el-option>-->
-						<el-option label="进入不带导航栏的webview" value="3"></el-option>
-						<el-option label="强更 安卓专用" value="4"></el-option>
+						<el-option label="进入不带导航栏的webview" value="1"></el-option>
+						<el-option label="强更 安卓专用" value="2"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="web地址" prop="web_url">
@@ -193,10 +189,8 @@
 			formatType: function (row, column) {
 				let version_config = {
 					'0': '进入App内部',
-					'1': '进入带导航栏的webview',
-					'2': '跳转浏览器打开web',
-					'3': '进入不带导航栏的webview',
-					'4': '强更 安卓专用'
+					'1': '进入不带导航栏的webview',
+					'2': '强更 安卓专用'
 				};
 				return version_config[row.app_version] || '未知类型';
 			},

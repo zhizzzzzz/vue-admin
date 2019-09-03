@@ -122,7 +122,7 @@
 				}
 			};
 			return {
-				sysName:'VUEADMIN',
+				sysName:'大J云后台',
 				collapsed:false,
 				sysUserName: '',
                 sysUserMail: '',
