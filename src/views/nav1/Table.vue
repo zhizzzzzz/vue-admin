@@ -25,13 +25,15 @@
 			</el-table-column>
 			<el-table-column prop="app_name" label="App名称" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="introduction" label="APP简介" width="120" sortable>
-			</el-table-column>
 			<el-table-column prop="app_version" label="强更类型" width="160" :formatter="formatType" sortable>
 			</el-table-column>
 			<el-table-column prop="web_url" label="web地址" min-width="160" sortable>
 			</el-table-column>
 			<el-table-column prop="force_update_url" label="强更地址" min-width="160" sortable>
+			</el-table-column>
+			<el-table-column prop="ad_url" label="广告地址" min-width="160" sortable>
+			</el-table-column>
+			<el-table-column prop="add_status" label="广告开关" width="120" :formatter="formatStatus" sortable>
 			</el-table-column>
 			<el-table-column label="操作" width="240px" align="center">
 				<template scope="scope">
@@ -77,6 +79,15 @@
 				<el-form-item label="强制更新地址" prop="force_update_url">
 					<el-input v-model="editForm.force_update_url" auto-complete="off"></el-input>
 				</el-form-item>
+				<el-form-item label="广告地址" prop="introduction">
+					<el-input v-model="editForm.ad_url" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="广告开关" prop="ad_status">
+					<el-select v-model="editForm.ad_status" placeholder="请选择">
+						<el-option label="关闭" value="0"></el-option>
+						<el-option label="开启" value="1"></el-option>
+					</el-select>
+				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="editFormVisible = false">取消</el-button>
@@ -93,11 +104,11 @@
 				<el-form-item label="APP名称" prop="app_name">
 					<el-input v-model="addForm.app_name" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="公司名称" prop="company">
-					<el-input v-model="addForm.company" auto-complete="off"></el-input>
-				</el-form-item>
 				<el-form-item label="APP简介" prop="introduction">
 					<el-input v-model="addForm.introduction" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="公司名称" prop="company">
+					<el-input v-model="addForm.company" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="强更类型" prop="app_version">
 					<el-select v-model="addForm.app_version" placeholder="请选择App版本">
@@ -111,6 +122,15 @@
 				</el-form-item>
 				<el-form-item label="强制更新地址" prop="force_update_url">
 					<el-input v-model="addForm.force_update_url" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="广告地址" prop="introduction">
+					<el-input v-model="addForm.ad_url" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="广告开关" prop="ad_status">
+					<el-select v-model="addForm.ad_status" placeholder="请选择">
+						<el-option label="关闭" value="0"></el-option>
+						<el-option label="开启" value="1"></el-option>
+					</el-select>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -161,7 +181,9 @@
 					introduction:'',
 					app_version: '',
 					web_url: '',
-					force_update_url: ''
+					force_update_url: '',
+					add_url: '',
+					add_status: ''
 				},
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
@@ -180,7 +202,9 @@
 					introduction:'',
 					app_version: '',
 					web_url: '',
-					force_update_url: ''
+					force_update_url: '',
+					ad_url:'',
+					ad_status:''
 				}
 
 			}
@@ -190,9 +214,16 @@
 				let version_config = {
 					'0': '进入App内部',
 					'1': '进入不带导航栏的webview',
-					'2': '强更 安卓专用'
+					'2': '强更 安卓专用',
 				};
 				return version_config[row.app_version] || '未知类型';
+			},
+			formatStatus: function (row, column) {
+				let status = {
+					'0': '关闭',
+					'1': '开启',
+				};
+				return status[row.ad_status] || '未知类型';
 			},
 			handleCurrentChange(val) {
 				this.page = val;
@@ -309,7 +340,9 @@
 					introduction:'',
 					app_version: '',
 					web_url: '',
-					force_update_url: ''
+					force_update_url: '',
+					ad_url:'',
+					ad_status:'0'
 				};
 			},
 			//编辑
