@@ -31,9 +31,9 @@
 			</el-table-column>
 			<el-table-column prop="force_update_url" label="强更地址" min-width="160" sortable>
 			</el-table-column>
-			<el-table-column prop="add_status" label="广告开关" width="120" :formatter="formatStatus" sortable>
+			<el-table-column prop="ad_status" label="广告开关" width="120" :formatter="formatStatus" sortable>
 			</el-table-column>
-            <el-table-column prop="start_add_status" label="启动页-广告开关" width="120" :formatter="formatStatus" sortable>
+            <el-table-column prop="start_ad_status" label="启动页-广告开关" width="160" :formatter="formatStatus" sortable>
             </el-table-column>
 			<el-table-column label="操作" width="240px" align="center" fixed="right">
 				<template scope="scope">
