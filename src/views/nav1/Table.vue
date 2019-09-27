@@ -19,7 +19,7 @@
 		<el-table :data="configs" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
-			<el-table-column prop="app_id"label="应用ID" width="160">
+			<el-table-column prop="app_id"label="应用ID" width="160" fixed="left">
 			</el-table-column>
 			<el-table-column prop="package_name" label="包名" width="120" sortable>
 			</el-table-column>
@@ -35,7 +35,7 @@
 			</el-table-column>
 			<el-table-column prop="add_status" label="广告开关" width="120" :formatter="formatStatus" sortable>
 			</el-table-column>
-			<el-table-column label="操作" width="240px" align="center">
+			<el-table-column label="操作" width="240px" align="center" fixed="right">
 				<template scope="scope">
 					<el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button type="primary" size="small" @click="handleView(scope.$index, scope.row)">预览</el-button>
@@ -52,20 +52,20 @@
 		</el-col>
 
 		<!--编辑界面-->
-		<el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
-			<el-form :model="editForm" label-width="120px" :rules="editFormRules" ref="editForm">
+		<el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false" @close="clears()" width="60%">
+			<el-form :inline="true" :model="editForm" label-width="160px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="包名" prop="package_name">
 					<el-input v-model="editForm.package_name" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="APP名称" prop="app_name">
 					<el-input v-model="editForm.app_name" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="公司名称" prop="company">
-					<el-input v-model="editForm.company" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="APP简介" prop="introduction">
-					<el-input v-model="editForm.introduction" auto-complete="off"></el-input>
-				</el-form-item>
+<!--				<el-form-item label="公司名称" prop="company">-->
+<!--					<el-input v-model="editForm.company" auto-complete="off"></el-input>-->
+<!--				</el-form-item>-->
+<!--				<el-form-item label="APP简介" prop="introduction">-->
+<!--					<el-input v-model="editForm.introduction" auto-complete="off"></el-input>-->
+<!--				</el-form-item>-->
 				<el-form-item label="强更类型" prop="app_version">
 					<el-select v-model="editForm.app_version" placeholder="请选择App版本">
 						<el-option label="进入App内部" value="0"></el-option>
@@ -79,14 +79,76 @@
 				<el-form-item label="强制更新地址" prop="force_update_url">
 					<el-input v-model="editForm.force_update_url" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="广告地址" prop="introduction">
+				<el-form-item></el-form-item>
+				<el-form-item label="广告地址" prop="ad_url">
 					<el-input v-model="editForm.ad_url" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="广告跳转类型" prop="ad_go_type">
+					<el-select v-model="editForm.ad_go_type" placeholder="请选择App版本">
+						<el-option label="进入App内部" value="0"></el-option>
+						<el-option label="进入不带导航栏的webview" value="1"></el-option>
+						<el-option label="强更 安卓专用" value="2"></el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="广告开关" prop="ad_status">
 					<el-select v-model="editForm.ad_status" placeholder="请选择">
 						<el-option label="关闭" value="0"></el-option>
 						<el-option label="开启" value="1"></el-option>
 					</el-select>
+				</el-form-item>
+				<el-form-item label="广告图片链接">
+					<el-upload
+							action="/api/appConfig/upload"
+							list-type="picture-card"
+							:limit="1"
+							:file-list="fileList"
+							:on-exceed="handleExceed"
+							:on-preview="handlePictureCardPreview"
+							:on-remove="handleRemove"
+							:on-change="handleChange"
+							:on-success="handleSuccess"
+							:on-error="handleError"
+							:beforeUpload="beforeAvatarUpload">
+						<i class="el-icon-plus"></i>
+					</el-upload>
+					<el-dialog :visible.sync="dialogVisible">
+						<img width="100%" :src="dialogImageUrl" alt="">
+					</el-dialog>
+				</el-form-item>
+				<el-form-item label="启动页-广告地址" prop="ad_url">
+					<el-input v-model="editForm.start_ad_url" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="启动页-广告跳转类型" prop="ad_go_type">
+					<el-select v-model="editForm.start_ad_go_type" placeholder="请选择App版本">
+						<el-option label="进入App内部" value="0"></el-option>
+						<el-option label="进入不带导航栏的webview" value="1"></el-option>
+						<el-option label="强更 安卓专用" value="2"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="启动页-广告开关" prop="ad_status">
+					<el-select v-model="editForm.start_ad_status" placeholder="请选择">
+						<el-option label="关闭" value="0"></el-option>
+						<el-option label="开启" value="1"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="启动页-广告图片链接">
+					<el-upload
+							action="/api/appConfig/upload"
+							list-type="picture-card"
+							:limit="1"
+							:file-list="startFileList"
+							:on-exceed="handleExceed"
+							:on-preview="handlePictureCardPreview"
+							:on-remove="startHandleRemove"
+							:on-change="handleChange"
+							:on-success="startHandleSuccess"
+							:on-error="handleError"
+							:beforeUpload="beforeAvatarUpload">
+						<i class="el-icon-plus"></i>
+					</el-upload>
+					<el-dialog :visible.sync="dialogVisible">
+						<img width="100%" :src="dialogImageUrl" alt="">
+					</el-dialog>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -96,20 +158,20 @@
 		</el-dialog>
 
 		<!--新增界面-->
-		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
-			<el-form :model="addForm" label-width="120px" :rules="addFormRules" ref="addForm">
+		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false" @close="clears()" width="60%">
+			<el-form :inline="true" :model="addForm" label-width="160px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="包名" prop="package_name">
 					<el-input v-model="addForm.package_name" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="APP名称" prop="app_name">
 					<el-input v-model="addForm.app_name" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="APP简介" prop="introduction">
-					<el-input v-model="addForm.introduction" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="公司名称" prop="company">
-					<el-input v-model="addForm.company" auto-complete="off"></el-input>
-				</el-form-item>
+<!--				<el-form-item label="APP简介" prop="introduction">-->
+<!--					<el-input v-model="addForm.introduction" auto-complete="off"></el-input>-->
+<!--				</el-form-item>-->
+<!--				<el-form-item label="公司名称" prop="company">-->
+<!--					<el-input v-model="addForm.company" auto-complete="off"></el-input>-->
+<!--				</el-form-item>-->
 				<el-form-item label="强更类型" prop="app_version">
 					<el-select v-model="addForm.app_version" placeholder="请选择App版本">
 						<el-option label="进入App内部" value="0"></el-option>
@@ -123,14 +185,76 @@
 				<el-form-item label="强制更新地址" prop="force_update_url">
 					<el-input v-model="addForm.force_update_url" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="广告地址" prop="introduction">
+				<el-form-item></el-form-item>
+				<el-form-item label="广告地址" prop="ad_url">
 					<el-input v-model="addForm.ad_url" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="广告跳转类型" prop="ad_go_type">
+					<el-select v-model="addForm.ad_go_type" placeholder="请选择App版本">
+						<el-option label="进入App内部" value="0"></el-option>
+						<el-option label="进入不带导航栏的webview" value="1"></el-option>
+						<el-option label="强更 安卓专用" value="2"></el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="广告开关" prop="ad_status">
 					<el-select v-model="addForm.ad_status" placeholder="请选择">
 						<el-option label="关闭" value="0"></el-option>
 						<el-option label="开启" value="1"></el-option>
 					</el-select>
+				</el-form-item>
+				<el-form-item label="广告图片链接">
+					<el-upload
+							action="/api/appConfig/upload"
+							list-type="picture-card"
+							:limit="1"
+							:file-list="fileList"
+							:on-exceed="handleExceed"
+							:on-preview="handlePictureCardPreview"
+							:on-remove="handleRemove"
+							:on-change="handleChange"
+							:on-success="handleSuccess"
+							:on-error="handleError"
+							:beforeUpload="beforeAvatarUpload">
+						<i class="el-icon-plus"></i>
+					</el-upload>
+					<el-dialog :visible.sync="dialogVisible">
+						<img width="100%" :src="dialogImageUrl" alt="">
+					</el-dialog>
+				</el-form-item>
+				<el-form-item label="启动页-广告地址" prop="ad_url">
+					<el-input v-model="addForm.start_ad_url" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="启动页-广告跳转类型" prop="ad_go_type">
+					<el-select v-model="addForm.start_ad_go_type" placeholder="请选择App版本">
+						<el-option label="进入App内部" value="0"></el-option>
+						<el-option label="进入不带导航栏的webview" value="1"></el-option>
+						<el-option label="强更 安卓专用" value="2"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="启动页-广告开关" prop="ad_status">
+					<el-select v-model="addForm.start_ad_status" placeholder="请选择">
+						<el-option label="关闭" value="0"></el-option>
+						<el-option label="开启" value="1"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="启动页-广告图片链接">
+					<el-upload
+							action="/api/appConfig/upload"
+							list-type="picture-card"
+							:limit="1"
+							:file-list="startFileList"
+							:on-exceed="handleExceed"
+							:on-preview="handlePictureCardPreview"
+							:on-remove="startHandleRemove"
+							:on-change="handleChange"
+							:on-success="startHandleSuccess"
+							:on-error="handleError"
+							:beforeUpload="beforeAvatarUpload">
+						<i class="el-icon-plus"></i>
+					</el-upload>
+					<el-dialog :visible.sync="dialogVisible">
+						<img width="100%" :src="dialogImageUrl" alt="">
+					</el-dialog>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -142,8 +266,7 @@
 </template>
 
 <script>
-	import util from '../../common/js/util'
-	//import NProgress from 'nprogress'
+
 	import { getConfigListPage, doConfig, delConfig, transferConfig, getConfig } from '../../api/api';
 
 	export default {
@@ -182,8 +305,14 @@
 					app_version: '',
 					web_url: '',
 					force_update_url: '',
-					add_url: '',
-					add_status: ''
+					ad_url: '',
+					ad_status: '',
+					ad_go_type: '',
+					ad_img_url: '',
+					start_ad_url: '',
+					start_ad_status: '',
+					start_ad_go_type: '',
+					start_ad_img_url: ''
 				},
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
@@ -204,12 +333,92 @@
 					web_url: '',
 					force_update_url: '',
 					ad_url:'',
-					ad_status:''
-				}
-
+					ad_status:'',
+					ad_go_type: '',
+					start_ad_url: '',
+					start_ad_status: '',
+					start_ad_go_type: '',
+					start_ad_img_url: ''
+				},
+				dialogImageUrl: '',
+				dialogVisible: false,
+				limitCount: 1,
+				fileList: [],
+				startFileList: [],
+				ad_img_url: '',
+				start_ad_img_url: '',
 			}
 		},
 		methods: {
+			clears(){
+				this.fileList = [];
+				this.startFileList = [];
+			},
+			handleRemove(file, fileList) {
+				this.ad_img_url = '';
+			},
+			startHandleRemove(file, fileList) {
+				this.start_ad_img_url = '';
+			},
+			handleChange(file, fileList) {
+			},
+			handlePictureCardPreview(file) {
+				this.dialogImageUrl = file.url;
+				this.dialogVisible = true;
+			},
+			handleExceed(files, fileList) {
+				this.$message.warning(`只能上传单张图片!`);
+			},
+			handleSuccess(response, file, fileList) {
+				let {status, result, msg} = response;
+				if (status == 'success') {
+					this.ad_img_url = result;
+					this.fileList = [{
+						'url': this.ad_img_url,
+						'uid': file.uid
+					}];
+				} else {
+					this.$message({
+						message: msg,
+						type: 'error'
+					});
+				}
+				this.addLoading = false;
+				this.editLoading = false;
+			},
+			startHandleSuccess(response, file, fileList) {
+				let {status, result, msg} = response;
+				if (status == 'success') {
+					this.start_ad_img_url = result;
+					this.startFileList = [{
+						'url': this.start_ad_img_url,
+						'uid': file.uid
+					}];
+				} else {
+					this.$message({
+						message: msg,
+						type: 'error'
+					});
+				}
+				this.addLoading = false;
+				this.editLoading = false;
+			},
+			handleError(err, file, fileList) {
+				this.$message({
+					message: '图片上传异常',
+					type: 'error'
+				});
+				this.addLoading = false;
+				this.editLoading = false;
+			},
+			beforeAvatarUpload(file) {
+				if (['image/jpeg', 'image/jpg', 'image/png', 'image/gif'].indexOf(file.type) === -1) {
+					this.$message.error('上传图片只能是 jpg/jpeg/gif/png格式!')
+					return false
+				}
+				this.addLoading = true;
+				this.editLoading = true;
+			},
 			formatType: function (row, column) {
 				let version_config = {
 					'0': '进入App内部',
@@ -322,16 +531,39 @@
 			},
 			//显示编辑界面
 			handleEdit: function (index, row) {
-				this.editFormVisible = true;
+				let uid = '';
+				let suid = '';
+				if(this.fileList.length>0) {
+					uid = this.fileList[0].uid;
+				}
+				if(this.startFileList.length>0) {
+					suid = this.startFileList[0].uid;
+				}
+				this.fileList=[];
 				let fromObj = {};
 				Object.keys(this.editForm).forEach(function(key){
 					fromObj[key] = row[key];
 				});
 				this.editForm = fromObj;
+				if(!!fromObj.ad_img_url) {
+					this.fileList = [{
+						'url':fromObj.ad_img_url,
+						'uid':uid
+					}];
+				};
+				if(!!fromObj.start_ad_img_url) {
+					this.startFileList = [{
+						'url':fromObj.start_ad_img_url,
+						'uid':suid
+					}];
+				};
+				this.editFormVisible = true;
 			},
 			//显示新增界面
 			handleAdd: function () {
 				this.addFormVisible = true;
+				this.ad_img_url = '',
+				this.start_ad_img_url = '',
 				this.addForm = {
 					app_id: '',
 					package_name: '',
@@ -342,7 +574,9 @@
 					web_url: '',
 					force_update_url: '',
 					ad_url:'',
-					ad_status:'0'
+					ad_status:'0',
+					start_ad_url:'',
+					start_ad_status:'0'
 				};
 			},
 			//编辑
@@ -354,6 +588,8 @@
 							//NProgress.start();
 							let para = Object.assign({}, this.editForm);
 							para.owner_id = this.loginUser.sysUserId;
+							para.ad_img_url = this.ad_img_url;
+							para.start_ad_img_url = this.start_ad_img_url;
 							doConfig(para).then((data) => {
 								this.editLoading = false;
 								//NProgress.done();
@@ -385,7 +621,13 @@
 							this.addLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.addForm);
-							para.owner_id = this.loginUser.sysUserId;
+							para.owner_id = this.loginUser.sysUserId
+							if(!!this.ad_img_url) {
+								para.ad_img_url = this.ad_img_url;
+							}
+							if(!!this.start_ad_img_url) {
+								para.start_ad_img_url = this.start_ad_img_url;
+							}
 							doConfig(para).then((data) => {
 								this.addLoading = false;
 								//NProgress.done();
@@ -458,9 +700,18 @@
 	}
 
 </script>
-<style>
+<style scoped>
 	.config-result {
 		width: 600px;
+	}
+	.el-upload-list--picture-card .el-upload-list__item-actions:hover span:first-child {
+		display: none;
+	}
+	.el-upload-list--picture-card .el-upload-list__item-actions span+span {
+		margin-left: 0px;
+	}
+	.el-dialog .el-form-item {
+		width: 400px;
 	}
 </style>
 <style scoped>
