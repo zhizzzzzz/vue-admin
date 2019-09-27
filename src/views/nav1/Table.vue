@@ -33,7 +33,7 @@
 			</el-table-column>
 			<el-table-column prop="ad_status" label="广告开关" width="120" :formatter="formatStatus" sortable>
 			</el-table-column>
-            <el-table-column prop="start_ad_status" label="启动页-广告开关" width="160" :formatter="formatStatus" sortable>
+            <el-table-column prop="start_ad_status" label="启动页-广告开关" width="160" :formatter="formatStartStatus" sortable>
             </el-table-column>
 			<el-table-column label="操作" width="240px" align="center" fixed="right">
 				<template scope="scope">
@@ -433,6 +433,13 @@
 					'1': '开启',
 				};
 				return status[row.ad_status] || '未知类型';
+			},
+			formatStartStatus: function (row, column) {
+				let status = {
+					'0': '关闭',
+					'1': '开启',
+				};
+				return status[row.start_ad_status] || '未知类型';
 			},
 			handleCurrentChange(val) {
 				this.page = val;
