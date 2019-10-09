@@ -338,7 +338,6 @@
 					start_ad_url: '',
 					start_ad_status: '',
 					start_ad_go_type: '',
-					start_ad_img_url: ''
 				},
 				dialogImageUrl: '',
 				dialogVisible: false,
@@ -540,37 +539,42 @@
 			handleEdit: function (index, row) {
 				let uid = '';
 				let suid = '';
+                this.ad_img_url = '';
+                this.start_ad_img_url = '';
 				if(this.fileList.length>0) {
 					uid = this.fileList[0].uid;
 				}
 				if(this.startFileList.length>0) {
 					suid = this.startFileList[0].uid;
 				}
-				this.fileList=[];
+                this.fileList=[];
+                this.startFileList=[];
 				let fromObj = {};
 				Object.keys(this.editForm).forEach(function(key){
 					fromObj[key] = row[key];
 				});
 				this.editForm = fromObj;
-				if(!!fromObj.ad_img_url) {
+				if(!!row.ad_img_url) {
 					this.fileList = [{
-						'url':fromObj.ad_img_url,
+						'url':row.ad_img_url,
 						'uid':uid
 					}];
+					this.ad_img_url = row.ad_img_url;
 				};
-				if(!!fromObj.start_ad_img_url) {
+				if(!!row.start_ad_img_url) {
 					this.startFileList = [{
-						'url':fromObj.start_ad_img_url,
+						'url':row.start_ad_img_url,
 						'uid':suid
 					}];
+                    this.start_ad_img_url = row.start_ad_img_url;
 				};
 				this.editFormVisible = true;
 			},
 			//显示新增界面
 			handleAdd: function () {
 				this.addFormVisible = true;
-				this.ad_img_url = '',
-				this.start_ad_img_url = '',
+				this.ad_img_url = '';
+				this.start_ad_img_url = '';
 				this.addForm = {
 					app_id: '',
 					package_name: '',
