@@ -498,12 +498,7 @@
 					inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
 					inputErrorMessage: '邮箱格式不正确'
 				}).then(({value}) => {
-
-					this.$confirm('此操作将转移应用配置, 是否继续?', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-						type: 'warning'
-					}).then(() => {
+					this.$confirm('确认转移吗？', '提示', {}).then(() => {
 						let para = {to_user_mail: value, app_id: row.app_id, user_id:this.loginUser.sysUserId};
 						transferConfig(para).then((data) => {
 							//NProgress.done();
@@ -527,7 +522,6 @@
 							message: '已取消'
 						});
 					});
-
 				}).catch(() => {
 					this.$message({
 						type: 'info',
