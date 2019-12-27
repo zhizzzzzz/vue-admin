@@ -492,35 +492,28 @@
 			},
 			//应用转移
 			handleTransfer: function (index, row) {
-				this.$prompt('请输入用户邮箱', '提示', {
-					confirmButtonText: '确定',
+				this.$prompt('请输入用户邮箱并确认转移', '提示', {
+					confirmButtonText: '确认转移',
 					cancelButtonText: '取消',
 					inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
 					inputErrorMessage: '邮箱格式不正确'
 				}).then(({value}) => {
-					this.$confirm('确认转移吗？', '提示', {}).then(() => {
-						let para = {to_user_mail: value, app_id: row.app_id, user_id:this.loginUser.sysUserId};
-						transferConfig(para).then((data) => {
-							//NProgress.done();
-							let {msg, status, result} = data;
-							if (status !== 'success') {
-								this.$message({
-									message: msg,
-									type: 'error'
-								});
-							} else {
-								this.$message({
-									type: 'success',
-									message: '已转移至邮箱: ' + value
-								});
-								this.getConfigs();
-							}
-						});
-					}).catch(() => {
-						this.$message({
-							type: 'info',
-							message: '已取消'
-						});
+					let para = {to_user_mail: value, app_id: row.app_id, user_id:this.loginUser.sysUserId};
+					transferConfig(para).then((data) => {
+						//NProgress.done();
+						let {msg, status, result} = data;
+						if (status !== 'success') {
+							this.$message({
+								message: msg,
+								type: 'error'
+							});
+						} else {
+							this.$message({
+								type: 'success',
+								message: '已转移至邮箱: ' + value
+							});
+							this.getConfigs();
+						}
 					});
 				}).catch(() => {
 					this.$message({
